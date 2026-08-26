@@ -1,13 +1,209 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* =========================================
+   NAVBAR FIX (Right-Aligned & Styled)
+   ========================================= */
+.navbar, .app-header {
+  display: flex;
+  justify-content: space-between; /* This forces the logo left and links right */
+  align-items: center;
+  padding: 1.25rem 2rem;
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.brand, .navbar h2 {
+  display: flex;
+  align-items: center;
+  color: #38bdf8;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-links, .navbar-links {
+  display: flex;
+  gap: 2rem; /* Adds clean spacing between each link */
+  margin-left: auto; /* Guarantees the block is pushed to the far right */
+}
+
+.nav-links a, .navbar-links a {
+  color: #94a3b8;
+  text-decoration: none; /* Removes the ugly default underline */
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease-in-out;
+}To move your navigation links ("Dashboard", "Catalogue", "Issue/Return", "History") to the right side of the screen as shown in `image_3ae7ac.png`, the most effective method is using CSS **Flexbox**. 
+
+Looking at `image_3ae468.png`, it appears your links are currently clustered together without proper layout styling. Here is the standard way to structure and style your navigation bar to achieve that left/right split.
+
+### 1. The HTML Structure
+Wrap your logo and your links in two separate container elements within your main navigation bar.
+
+```html
+<nav class="navbar">
+  <!-- Left Side: Logo -->
+  <div class="logo">
+    <img src="your-icon.png" alt="Icon">
+    <span>Lab Tracker</span>
+  </div>
+
+  <!-- Right Side: Navigation Links -->
+  <div class="nav-links">
+    <a href="#">Dashboard</a>
+    <a href="#">Catalogue</a>
+    <a href="#">Issue/Return</a>
+    <a href="#">History</a>
+  </div>
+</nav>
+
+
+:root {
+--bg-main: #f5f5f5;
+--bg-card: #ffffff;
+--bg-header: #e6e6e6;
+
+
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
+body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; }
+
+/* Sticky Navbar Fix */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--bg-header);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 2rem;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand { display: flex; align-items: center; gap: 0.5rem; font-size: 1.25rem; font-weight: 700; color: var(--primary); }
+.nav-links { display: flex; gap: 0.5rem; }
+
+.nav-item {
+  text-decoration: none;
+  color: var(--text-muted);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.nav-item:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+.nav-item.active { color: #fff; background: #0284c7; font-weight: 600; }
+
+/* Dashboard & Layout */
+.container, .page-wrapper { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+.page-header-title h1 { font-size: 1.75rem; color: #fff; margin-bottom: 0.25rem; }
+.page-header-title p { color: var(--text-muted); margin-bottom: 2rem; }
+
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+.stat-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 1.5rem; display: flex; flex-direction: column; }
+.stat-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+.stat-value { font-size: 2.5rem; font-weight: 800; margin: 0.25rem 0; }
+.stat-desc { font-size: 0.8rem; color: var(--text-muted); }
+
+.stat-card.blue .stat-value { color: #38bdf8; }
+.stat-card.green .stat-value { color: #4ade80; }
+.stat-card.yellow .stat-value { color: #facc15; }
+.stat-card.red .stat-value { color: #f87171; }
+
+.dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+.card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 1.5rem; }
+.divider { border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0 1.25rem; }
+
+.alert-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+.alert-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 0.75rem 1rem; border-radius: 8px; }
+.alert-item small { display: block; color: var(--text-muted); font-size: 0.75rem; }
+
+.quick-actions-grid { display: flex; flex-direction: column; gap: 0.75rem; }
+.action-btn { text-decoration: none; text-align: center; padding: 0.75rem 1rem; border-radius: 8px; font-weight: 600; transition: all 0.2s; }
+.primary-btn { background: #0284c7; color: #fff; }
+.outline-btn { border: 1px solid var(--border-color); color: var(--text-main); background: rgba(255,255,255,0.03); }
+.action-btn:hover { transform: translateY(-2px); }
+
+/* Status Badges */
+.badge { padding: 0.25rem 0.65rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+.badge.Available { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+.badge.In-Use { background: rgba(250, 204, 21, 0.15); color: #facc15; }
+
+/* --- Sticky Navbar Fix & Right Alignment --- */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--bg-header);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 2rem;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between; /* Pushes brand left, links right */
+  align-items: center;
+  width: 100%;
+}
+
+.nav-links { 
+  display: flex; 
+  gap: 1rem; 
+  margin-left: auto; /* Strictly forces links to the right side */
+}
+
+/* --- Professional Data Tables --- */
+.table-container {
+  overflow-x: auto;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.catalogue-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.catalogue-table th {
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-muted);
+  padding: 1.25rem 1.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.catalogue-table td {
+  padding: 1.15rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  vertical-align: middle;
+}
+
+.catalogue-table tr:last-child td {
+  border-bottom: none;
+}
+
+.catalogue-table tr:hover td {
+  background: rgba(56, 189, 248, 0.04);
 }
