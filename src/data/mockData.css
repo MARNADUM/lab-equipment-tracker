@@ -1,0 +1,38 @@
+/* Badge & Tag Helpers for Data Display */
+.data-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.data-badge.available {
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.data-badge.in-use {
+  background: rgba(250, 204, 21, 0.15);
+  color: #facc15;
+  border: 1px solid rgba(250, 204, 21, 0.3);
+}
+
+.data-badge.maintenance {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.data-code {
+  font-family: monospace;
+  color: #818cf8;
+  font-size: 0.85rem;
+  background: rgba(129, 140, 248, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}

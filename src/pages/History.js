@@ -1,15 +1,16 @@
 import React from 'react';
+import './History.css';
 
-const History = ({ historyLog }) => {
+const History = ({ historyLog = [] }) => {
   return (
-    <div className="page-wrapper">
+    <div className="page-wrapper history-page">
       <div className="page-header-title">
         <h1>Transaction History</h1>
-        <p>Complete audit trail of equipment issuance and returns.</p>
+        <p>Complete audit log of checked out and returned items</p>
       </div>
 
-      <div className="table-container">
-        {historyLog && historyLog.length > 0 ? (
+      {historyLog.length > 0 ? (
+        <div className="table-container">
           <table className="catalogue-table">
             <thead>
               <tr>
@@ -17,47 +18,39 @@ const History = ({ historyLog }) => {
                 <th>Transaction ID</th>
                 <th>Equipment Details</th>
                 <th>Action</th>
-                <th>Researcher / User</th>
+                <th>Researcher</th>
               </tr>
             </thead>
             <tbody>
-              {historyLog.map((log) => (
+              {historyLog.map(log => (
                 <tr key={log.id}>
-                  <td style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                    {log.date}
-                  </td>
-                  <td style={{ fontFamily: 'monospace', color: '#818cf8' }}>
-                    TXN-{log.id.toString().slice(-6)}
-                  </td>
+                  <td style={{ color: '#94a3b8', fontSize: '0.88rem' }}>{log.date}</td>
+                  <td className="transaction-id">TXN-{log.id.toString().slice(-6)}</td>
+                  <td><strong>{log.equipmentName}</strong></td>
                   <td>
-                    <strong>{log.equipmentName}</strong>
-                  </td>
-                  <td>
-                    <span className={`badge ${log.action}`}>
+                    <span className={`data-badge ${log.action === 'Issue' ? 'in-use' : 'available'}`}>
                       {log.action === 'Issue' ? 'Checked Out' : 'Returned'}
                     </span>
                   </td>
                   <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 'bold' }}>
-                        {log.user.charAt(0).toUpperCase()}
+                    <div className="user-badge">
+                      <div className="avatar-circle">
+                        {log.user ? log.user.charAt(0).toUpperCase() : 'U'}
                       </div>
-                      {log.user}
+                      <span>{log.user}</span>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        ) : (
-          <div className="empty-state" style={{ padding: '4rem 2rem', textAlign: 'center' }}>
-            <h3 style={{ marginBottom: '0.5rem', color: '#fff' }}>No history available</h3>
-            <p style={{ color: 'var(--text-muted)' }}>
-              Issue or return equipment in the Issue/Return tab to automatically generate audit logs here.
-            </p>
-          </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="empty-history">
+          <h3>No transactions recorded yet</h3>
+          <p>Issue or return an item to see log entries here.</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,32 +1,48 @@
-.history-timeline {
-  background: #1e293b;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  overflow: hidden;
-}
-
-.badge.Issue-Action { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
-.badge.Return-Action { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
-
-/* Modal Feature Styling */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(4px);
+.history-page {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.modal-content {
-  background: #1e293b;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  padding: 2rem;
-  width: 90%;
-  max-width: 480px;
-  color: #f8fafc;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+.transaction-id {
+  font-family: monospace;
+  color: #818cf8;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.avatar-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #334155;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.empty-history {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #131c38;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.empty-history h3 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.empty-history p {
+  color: #94a3b8;
 }

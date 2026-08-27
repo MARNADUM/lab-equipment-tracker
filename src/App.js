@@ -1,52 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Equipment from './pages/Equipment';
 import IssueEquipment from './pages/IssueEquipment';
 import History from './pages/History';
 import { initialEquipmentData } from './data/mockData';
-import './index.css';
+import './App.css';
 
 function App() {
-  // Load from localStorage or use initial mock data
-  const [equipmentList, setEquipmentList] = useState(() => {
-    const saved = localStorage.getItem('labEquipment');
-    return saved ? JSON.parse(saved) : initialEquipmentData;
-  });
+  const [equipment, setEquipment] = useState(initialEquipmentData);
+  const [historyLog, setHistoryLog] = useState([]);
 
-  const [historyLog, setHistoryLog] = useState(() => {
-    const saved = localStorage.getItem('labHistory');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const handleIssue = (id, user) => {
+    setEquipment(prev => prev.map(item => {
+      if (item.id === id) {
+        const nextAvail = item.available - 1;
+        return {
+          ...item,
+          available: nextAvail,
+          status: nextAvail === 0 ? 'In-Use' : item.status
+        };
+      }
+      return item;
+    }));
 
-  // Sync to localStorage whenever data changes (useEffect)
-  useEffect(() => {
-    localStorage.setItem('labEquipment', JSON.stringify(equipmentList));
-  }, [equipmentList]);
+    const item = equipment.find(e => e.id === id);
+    setHistoryLog(prev => [{
+      id: Date.now(),
+      date: new Date().toLocaleString(),
+      equipmentName: item ? item.name : 'Equipment',
+      action: 'Issue',
+      user: user
+    }, ...prev]);
+  };
 
-  useEffect(() => {
-    localStorage.setItem('labHistory', JSON.stringify(historyLog));
-  }, [historyLog]);
+  const handleReturn = (id, user) => {
+    setEquipment(prev => prev.map(item => {
+      if (item.id === id) {
+        const nextAvail = item.available + 1;
+        return {
+          ...item,
+          available: nextAvail,
+          status: 'Available'
+        };
+      }
+      return item;
+    }));
+
+    const item = equipment.find(e => e.id === id);
+    setHistoryLog(prev => [{
+      id: Date.now(),
+      date: new Date().toLocaleString(),
+      equipmentName: item ? item.name : 'Equipment',
+      action: 'Return',
+      user: user
+    }, ...prev]);
+  };
 
   return (
     <Router>
-      <nav className="navbar">
-        <h2>🔬 Lab Tracker</h2>
-        <div className="navbar-links">
-          <Link to="/">Dashboard</Link>
-          <Link to="/equipment">Catalogue</Link>
-          <Link to="/issue">Issue/Return</Link>
-          <Link to="/history">History</Link>
-        </div>
-      </nav>
-      
-      <div className="container">
-        <Routes>
-          <Route path="/" element={<Dashboard equipment={equipmentList} />} />
-          <Route path="/equipment" element={<Equipment equipment={equipmentList} />} />
-          <Route path="/issue" element={<IssueEquipment equipmentList={equipmentList} setEquipmentList={setEquipmentList} historyLog={historyLog} setHistoryLog={setHistoryLog} />} />
-          <Route path="/history" element={<History historyLog={historyLog} />} />
-        </Routes>
+      <div className="app-container">
+        <Navbar />
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<Dashboard equipment={equipment} />} />
+            <Route path="/equipment" element={<Equipment equipment={equipment} />} />
+            <Route path="/issue" element={<IssueEquipment equipment={equipment} onIssue={handleIssue} onReturn={handleReturn} />} />
+            <Route path="/history" element={<History historyLog={historyLog} />} />
+          </Routes>
+        </main>
       </div>
     </Router>
   );

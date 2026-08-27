@@ -1,29 +1,29 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import './Navbar.css'; // Make sure this import is present if using a separate CSS file
+import './Navbar.css';
 
 const Navbar = () => {
   return (
-    <nav className="navbar">
+    <header className="navbar-container">
       <div className="navbar-brand">
-        <span>🔬</span>
-        <span>Lab Tracker</span>
+        <span className="brand-icon">🔬</span>
+        <span className="brand-title">Lab Tracker</span>
       </div>
-      <div className="navbar-links">
-        <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : '')}>
+      <nav className="navbar-links">
+        <NavLink to="/" end className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
           Dashboard
         </NavLink>
-        <NavLink to="/equipment" className={({ isActive }) => (isActive ? 'active' : '')}>
+        <NavLink to="/equipment" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
           Catalogue
         </NavLink>
-        <NavLink to="/issue" className={({ isActive }) => (isActive ? 'active' : '')}>
+        <NavLink to="/issue" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
           Issue/Return
         </NavLink>
-        <NavLink to="/history" className={({ isActive }) => (isActive ? 'active' : '')}>
+        <NavLink to="/history" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
           History
         </NavLink>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 };
 

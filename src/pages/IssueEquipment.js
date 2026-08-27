@@ -1,97 +1,88 @@
 import React, { useState } from 'react';
 import './IssueEquipment.css';
-const IssueEquipment = ({ equipmentList, setEquipmentList, historyLog, setHistoryLog }) => {
+
+const IssueEquipment = ({ equipment = [], onIssue, onReturn }) => {
   const [selectedId, setSelectedId] = useState('');
-  const [action, setAction] = useState('Issue'); // 'Issue' or 'Return'
-  const [user, setUser] = useState('');
-  const [error, setError] = useState('');
+  const [userName, setUserName] = useState('');
+  const [actionType, setActionType] = useState('Issue');
+  const [message, setMessage] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError('');
-
-    // 1. Form Validation
-    if (!selectedId || !user) {
-      setError('Please select an item and enter a user name.');
+    if (!selectedId || !userName.trim()) {
+      setMessage({ type: 'error', text: 'Please fill in all fields.' });
       return;
     }
 
-    // Array method: find()
-    const itemIndex = equipmentList.findIndex(eq => eq.id === parseInt(selectedId));
-    if (itemIndex === -1) return;
-    
-    const item = equipmentList[itemIndex];
-    const updatedList = [...equipmentList];
+    const item = equipment.find(e => e.id === parseInt(selectedId));
+    if (!item) return;
 
-    // 2. Logic & Status Updates
-    if (action === 'Issue') {
+    if (actionType === 'Issue') {
       if (item.available <= 0) {
-        setError('This item is currently out of stock.');
+        setMessage({ type: 'error', text: 'This equipment is out of stock.' });
         return;
       }
-      updatedList[itemIndex].available -= 1;
-      if (updatedList[itemIndex].available === 0) updatedList[itemIndex].status = 'In-Use';
+      if (onIssue) onIssue(item.id, userName);
+      setMessage({ type: 'success', text: `Successfully issued ${item.name} to ${userName}.` });
     } else {
-      if (item.available >= item.quantity) {
-        setError('All items are already returned.');
-        return;
-      }
-      updatedList[itemIndex].available += 1;
-      updatedList[itemIndex].status = 'Available';
+      if (onReturn) onReturn(item.id, userName);
+      setMessage({ type: 'success', text: `Successfully returned ${item.name} from ${userName}.` });
     }
 
-    // 3. Update State & History
-    setEquipmentList(updatedList);
-    
-    const newLog = {
-      id: Date.now(),
-      equipmentName: item.name,
-      action: action,
-      user: user,
-      date: new Date().toLocaleString()
-    };
-    setHistoryLog([newLog, ...historyLog]);
-    
-    // Reset form
-    setUser('');
-    setSelectedId('');
-    alert(`Successfully ${action}d ${item.name}!`);
+    setUserName('');
   };
 
   return (
-    <div className="card" style={{ maxWidth: '600px', margin: '0 auto' }}>
-      <h2 className="page-header">Issue / Return Simulation</h2>
-      
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Select Equipment</label>
-          <select className="form-control" value={selectedId} onChange={(e) => setSelectedId(e.target.value)}>
-            <option value="">-- Choose Item --</option>
-            {equipmentList.map(eq => (
-              <option key={eq.id} value={eq.id}>{eq.name} (Avail: {eq.available})</option>
-            ))}
-          </select>
+    <div className="page-wrapper issue-page">
+      <div className="form-card">
+        <div className="page-header-title" style={{ marginBottom: '1.5rem' }}>
+          <h2>Issue / Return Equipment</h2>
+          <p>Process equipment movement for researchers</p>
         </div>
 
-        <div className="form-group">
-          <label>Action</label>
-          <select className="form-control" value={action} onChange={(e) => setAction(e.target.value)}>
-            <option value="Issue">Issue Item</option>
-            <option value="Return">Return Item</option>
-          </select>
-        </div>
+        {message && (
+          <div className={`alert-banner ${message.type}`}>
+            {message.text}
+          </div>
+        )}
 
-        <div className="form-group">
-          <label>User / Researcher Name</label>
-          <input type="text" className="form-control" value={user} onChange={(e) => setUser(e.target.value)} placeholder="e.g. Dr. Smith" />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Action Type</label>
+            <select className="form-select" value={actionType} onChange={e => setActionType(e.target.value)}>
+              <option value="Issue">Issue (Check Out)</option>
+              <option value="Return">Return (Check In)</option>
+            </select>
+          </div>
 
-        {error && <p className="error-text">{error}</p>}
+          <div className="form-group">
+            <label>Select Equipment</label>
+            <select className="form-select" value={selectedId} onChange={e => setSelectedId(e.target.value)}>
+              <option value="">-- Choose Item --</option>
+              {equipment.map(item => (
+                <option key={item.id} value={item.id}>
+                  {item.name} ({item.available} available)
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <button type="submit" className="btn btn-primary" style={{ marginTop: '1rem', width: '100%' }}>
-          Submit {action}
-        </button>
-      </form>
+          <div className="form-group">
+            <label>Researcher / User Name</label>
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Enter researcher name"
+              value={userName}
+              onChange={e => setUserName(e.target.value)}
+            />
+          </div>
+
+          <button type="submit" className="submit-btn">
+            {actionType === 'Issue' ? 'Confirm Checkout' : 'Confirm Return'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
